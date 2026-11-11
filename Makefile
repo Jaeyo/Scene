@@ -9,7 +9,9 @@ export DEVELOPER_DIR
 ARCH       := $(shell uname -m)
 DERIVED    := .build/Xcode
 PACKAGES   := .build/SourcePackages
-DEBUG_APP  := $(DERIVED)/Build/Products/Debug/Scene.app
+BUILT_APP  := $(DERIVED)/Build/Products/Debug/Scene.app
+# make build copies the Debug app here, next to the release bundle make app writes (build/Scene.app).
+DEBUG_APP  := build/Scene-debug.app
 SNAPSHOT  ?= /tmp/scene-snap
 # Optional: FILTER=<test or suite> for kit-test, THEME=<theme id> and APPEARANCE=light|dark for snapshot.
 FILTER    ?=
@@ -31,8 +33,12 @@ XCODEBUILD := xcodebuild -project Scene.xcodeproj -scheme Scene \
 help: ## List the targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-10s %s\n", $$1, $$2}'
 
-build: ## Debug build of the app and the helper
+build: ## Debug build of the app and the helper, copied to build/Scene-debug.app
 	$(XCODEBUILD) -configuration Debug -quiet build
+	rm -rf "$(DEBUG_APP)"
+	mkdir -p build
+	ditto "$(BUILT_APP)" "$(DEBUG_APP)"
+	@echo "Built $(DEBUG_APP)"
 
 test: ## Every SceneKit test through the Scene scheme (Scripts/test.sh)
 	./Scripts/test.sh $(LOCAL_SIGN)
@@ -43,7 +49,7 @@ kit-test: ## SceneKit tests with Swift Package Manager; FILTER= narrows them
 app: ## Release bundle in build/Scene.app (Scripts/package_app.sh)
 	./Scripts/package_app.sh
 
-run: build ## Build, then open the Debug app
+run: build ## Build, then open build/Scene-debug.app
 	open "$(DEBUG_APP)"
 
 snapshot: build ## Render the app windows to SNAPSHOT= (default /tmp/scene-snap) in the background, without the real switcher

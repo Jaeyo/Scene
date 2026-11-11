@@ -25,11 +25,11 @@ The `Makefile` wraps these commands; `make` lists the targets:
 
 | Target | Does |
 |---|---|
-| `make build` | The Debug build above |
+| `make build` | The Debug build above, then a copy of it in `build/Scene-debug.app` |
 | `make test` | `./Scripts/test.sh` |
 | `make kit-test FILTER=<name>` | `swift test` for SceneKit, narrowed by `--filter` when `FILTER` is set |
 | `make app` | `./Scripts/package_app.sh` |
-| `make run` | Builds, then opens the Debug app |
+| `make run` | Builds, then opens `build/Scene-debug.app` |
 | `make snapshot THEME=<id> APPEARANCE=light` | Builds, then renders snapshot mode in the background with `SCENE_SNAPSHOT_SWITCHER=0` into `SNAPSHOT` (default `/tmp/scene-snap`) |
 | `make themes` | `python3 Scripts/make-bundled-themes.py` |
 | `make clean` | Removes `.build` and `build` |
