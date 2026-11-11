@@ -78,6 +78,7 @@ Last updated: 2026-09-30. Version 0.1.0, build 4 (`version.env`).
 - In the running app: dragging the Theme Maker's sliders, Shuffle, From Wallpaper, Undo, setting a color by hand, Save to Scene, Export Folder…, and dropping images on the wallpaper slots. `--install` with the real library (a test covers it with a fake library).
 - The skill in a real agent session started by someone who asks for a theme.
 - Obsidian in the running app. Fixture tests cover detecting every vault (missing, without `appearance.json`, unreadable), both looks and a forced look, clearing a custom accent, snippets that set colors, byte-for-byte Restore, and keeping a theme the user picked later. That open vaults change live comes from reading Obsidian 1.15.0's app code; no theme was applied to the real vaults.
+- MonoCode in the running app. Fixture tests cover the file for both looks and a forced look, keeping comments and other keys in `appearance.json`, Restore with and without an earlier `colorTheme`, MonoCode's own “Use built-in theme”, and blocked setups. MonoCode's `parseExternalTheme` accepted Scene's files for system, dark, and light. The installed MonoCode 0.13.0 does not have external themes yet, so nothing was applied to it; Scene writes the files for any version.
 
 ## Open decisions for the user
 

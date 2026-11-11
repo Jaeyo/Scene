@@ -191,7 +191,7 @@ struct AppIcon: View {
         "terminal": [TerminalAppIntegration.bundleID], "zed": ZedIntegration.bundleIDs, "xcode": [XcodeIntegration.bundleID],
         "alacritty": [AlacrittyIntegration.bundleID], "rio": [RioIntegration.bundleID],
         "warp": [WarpIntegration.bundleID], "bateri": [BateriIntegration.bundleID],
-        "rex": [RexIntegration.bundleID], "obsidian": [ObsidianIntegration.bundleID],
+        "rex": [RexIntegration.bundleID], "obsidian": [ObsidianIntegration.bundleID], "monocode": [MonocodeIntegration.bundleID],
     ]) { $0[$1.id] = $1.bundleIDs }
 
     private static var icons: [String: NSImage?] = [:]
