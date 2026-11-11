@@ -77,6 +77,7 @@ Last updated: 2026-09-30. Version 0.1.0, build 4 (`version.env`).
 - The wallpaper of every Space on screen, Space by Space. The live test checks the store and the restarted agent, not what each Space shows.
 - In the running app: dragging the Theme Maker's sliders, Shuffle, From Wallpaper, Undo, setting a color by hand, Save to Scene, Export Folder…, and dropping images on the wallpaper slots. `--install` with the real library (a test covers it with a fake library).
 - The skill in a real agent session started by someone who asks for a theme.
+- Obsidian in the running app. Fixture tests cover detecting every vault (missing, without `appearance.json`, unreadable), both looks and a forced look, clearing a custom accent, snippets that set colors, byte-for-byte Restore, and keeping a theme the user picked later. That open vaults change live comes from reading Obsidian 1.15.0's app code; no theme was applied to the real vaults.
 
 ## Open decisions for the user
 

@@ -238,4 +238,62 @@ struct MoreRendererTests {
         let names = ((try JSONSerialization.jsonObject(with: single) as? [String: Any])?["themes"] as? [[String: Any]])?.compactMap { $0["name"] as? String }
         #expect(names == ["Scene Dark", "Scene Light"])
     }
+
+    /// Parses `theme.css` into its selectors and their variables.
+    static func obsidianBlocks(_ css: String) -> [String: [String: String]] {
+        var blocks: [String: [String: String]] = [:]
+        var current: String?
+        for raw in css.split(separator: "\n") {
+            let line = raw.trimmingCharacters(in: .whitespaces)
+            if line.hasSuffix("{") { current = String(line.dropLast()).trimmingCharacters(in: .whitespaces); blocks[current!] = [:] }
+            else if line == "}" { current = nil }
+            else if let current, line.hasPrefix("--"), line.hasSuffix(";"), let colon = line.firstIndex(of: ":") {
+                blocks[current]![String(line[line.index(line.startIndex, offsetBy: 2)..<colon])] =
+                    line[line.index(after: colon)..<line.index(before: line.endIndex)].trimmingCharacters(in: .whitespaces)
+            }
+        }
+        return blocks
+    }
+
+    @Test func obsidianThemeSetsEveryVariableFromNumbers() throws {
+        let theme = try Fixtures.theme("gruvbox")
+        let css = try ObsidianRenderer.themeCSS(variants: theme.variants)
+        let blocks = Self.obsidianBlocks(css)
+        #expect(Set(blocks.keys) == [".theme-dark", ".theme-light"])
+        for (selector, appearance) in [(".theme-dark", Appearance.dark), (".theme-light", .light)] {
+            let vars = try #require(blocks[selector])
+            let v = try #require(theme.variants[appearance])
+            #expect(vars.count == ObsidianRenderer.variables(v).count)
+            #expect(vars["background-primary"] == v.interface.background.description)
+            #expect(vars["text-normal"] == v.interface.foreground.description)
+            #expect(vars["color-accent"] == v.interface.accent.description)
+            #expect(vars["code-keyword"] == v.syntax.keyword.color.description)
+            #expect(vars["color-base-00"] == v.interface.background.description)
+            #expect(vars["color-base-100"] == v.interface.foreground.description)
+            #expect(vars["color-red-rgb"] == "\(v.terminal.ansi[1].r), \(v.terminal.ansi[1].g), \(v.terminal.ansi[1].b)")
+            // Every value is a color, an RGB triple, or a number: nothing from the theme's text.
+            for (name, value) in vars {
+                let triple = value.split(separator: ",").compactMap { UInt8($0.trimmingCharacters(in: .whitespaces)) }.count == 3
+                let number = Double(value.replacingOccurrences(of: "%", with: "")) != nil
+                #expect(RGBA(hex: value) != nil || triple || number, "\(name): \(value)")
+            }
+        }
+        #expect(!css.contains(theme.manifest.name))
+        #expect(ObsidianRenderer.baseTheme(variants: theme.variants) == "system")
+        let manifest = try #require(try JSONSerialization.jsonObject(with: ObsidianRenderer.manifest()) as? [String: String])
+        #expect(manifest["name"] == ObsidianRenderer.themeName)
+    }
+
+    @Test func obsidianThemeWithOneLookFillsBothBlocks() throws {
+        let theme = try Fixtures.theme("tokyo-night")
+        let only = try #require(theme.variants.values.first)
+        #expect(theme.variants.count == 1)
+        let blocks = Self.obsidianBlocks(try ObsidianRenderer.themeCSS(variants: theme.variants))
+        #expect(blocks[".theme-dark"] == blocks[".theme-light"])
+        #expect(blocks[".theme-dark"]?["background-primary"] == only.interface.background.description)
+        #expect(ObsidianRenderer.baseTheme(variants: theme.variants) == (only.appearance == .dark ? "obsidian" : "moonstone"))
+        let gruvbox = try Fixtures.theme("gruvbox")
+        #expect(ObsidianRenderer.baseTheme(variants: [.light: gruvbox.variants[.light]!]) == "moonstone")
+        #expect(throws: (any Error).self) { try ObsidianRenderer.themeCSS(variants: [:]) }
+    }
 }
