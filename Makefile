@@ -38,7 +38,7 @@ test: ## Every SceneKit test through the Scene scheme (Scripts/test.sh)
 	./Scripts/test.sh $(LOCAL_SIGN)
 
 kit-test: ## SceneKit tests with Swift Package Manager; FILTER= narrows them
-	swift test --package-path Packages/SceneKit $(if $(FILTER),--filter $(FILTER))
+	swift test --package-path Packages/SceneKit $(if $(FILTER),--filter '$(FILTER)')
 
 app: ## Release bundle in build/Scene.app (Scripts/package_app.sh)
 	./Scripts/package_app.sh
