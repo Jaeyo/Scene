@@ -21,6 +21,21 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild build -proje
 
 The app lands in `.build/Xcode/Build/Products/Debug/Scene.app`.
 
+The `Makefile` wraps these commands; `make` lists the targets:
+
+| Target | Does |
+|---|---|
+| `make build` | The Debug build above |
+| `make test` | `./Scripts/test.sh` |
+| `make kit-test FILTER=<name>` | `swift test` for SceneKit, narrowed by `--filter` when `FILTER` is set |
+| `make app` | `./Scripts/package_app.sh` |
+| `make run` | Builds, then opens the Debug app |
+| `make snapshot THEME=<id> APPEARANCE=light` | Builds, then renders snapshot mode in the background with `SCENE_SNAPSHOT_SWITCHER=0` into `SNAPSHOT` (default `/tmp/scene-snap`) |
+| `make themes` | `python3 Scripts/make-bundled-themes.py` |
+| `make clean` | Removes `.build` and `build` |
+
+It sets `DEVELOPER_DIR` to `/Applications/Xcode.app` when that exists, otherwise to the selected Xcode (`xcode-select -p`). A Mac without an Apple Development certificate builds and tests with an ad-hoc signature (`CODE_SIGN_IDENTITY=-`). It has no target for the live tests, `verify-tweaks.sh`, or `release.sh`, because those change the Mac or publish.
+
 ## Toolchain
 
 `xcode-select` on the development Mac points at an Xcode 27.1 beta in `~/Downloads`. Don't build with it: it can link against an older SDK, and its tools write a `default.profraw` file into the current folder. Use the release Xcode by setting `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`. The scripts in `Scripts/` already set it. `*.profraw` is in `.gitignore`.
