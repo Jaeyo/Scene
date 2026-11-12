@@ -6,7 +6,7 @@
   <img src=".github/assets/switcher.jpg" width="100%" alt="The Scene theme switcher over the desktop, with Cold Aisle selected" />
 </p>
 
-Scene gives your desktop, terminals, and code editors one theme in one step, the way [Omarchy](https://omarchy.org) does on Linux. It changes the wallpaper, Light/Dark, and the accent color, your terminal (Ghostty, iTerm2, kitty, Alacritty, Warp, Rex, bateri, or Terminal), your editor (VS Code, Cursor, Zed, Obsidian, Xcode, Neovim, Helix, Doom Emacs, and more), and tools like tmux and bat, all together. It can put your original setup back.
+Scene gives your desktop, terminals, and code editors one theme in one step, the way [Omarchy](https://omarchy.org) does on Linux. It changes the wallpaper, Light/Dark, and the accent color, your terminal (Ghostty, iTerm2, kitty, Alacritty, Warp, Rex, bateri, or Terminal), your editor (VS Code, Cursor, Zed, Obsidian, MonoCode, Xcode, Neovim, Helix, Doom Emacs, and more), and tools like tmux and bat, all together. It can put your original setup back.
 
 ## Switch from anywhere
 
@@ -43,7 +43,7 @@ Before a theme touches anything, Scene lists each app and every file and setting
 | Desktop | Wallpaper, Light/Dark, JankyBorders | `NSWorkspace`, and macOS's wallpaper store for the other Spaces (experimental); System Events, or a private call; one marked line in `bordersrc` |
 | macOS look | Accent color, icon & widget style | Private calls in a helper, on tested macOS builds only (experimental) |
 | Terminals | Ghostty, iTerm2, kitty, Alacritty, Warp, Rio, Rex, bateri, Herdr app, Terminal | A Scene theme file and one marked include or import line; an iTerm2 Dynamic Profile; a Terminal profile copied from your default one; for Rio, light/dark TOML themes with adaptive selection; for Rex, Scene's theme imported with Rex's own command while Rex is open; for bateri, a theme file per look and the theme keys in its settings; for the Herdr app, a theme file per look and the `theme` key in its `settings.json` |
-| Editors | VS Code, Cursor, VSCodium, Windsurf, Zed, Obsidian, Xcode, Neovim, Helix, Doom Emacs | A generated theme extension or theme file and one settings key; an Obsidian CSS theme in every vault; Xcode themes keep your fonts; a Neovim plugin file and a JSON data file; Doom Emacs theme files and one block in `config.el` |
+| Editors | VS Code, Cursor, VSCodium, Windsurf, Zed, Obsidian, MonoCode, Xcode, Neovim, Helix, Doom Emacs | A generated theme extension or theme file and one settings key; an Obsidian CSS theme in every vault; Xcode themes keep your fonts; a Neovim plugin file and a JSON data file; Doom Emacs theme files and one block in `config.el` |
 | Tools | tmux, bat and delta, btop, herdr, lazygit, k9s, ZapFast | A theme file and one marked include line or config key; herdr's color tokens in its config; lazygit's theme colors in its `config.yml`; a k9s skin file and the `ui.skin` key; ZapFast gets a JSON palette and theme selection |
 
 ZapFast uses Scene’s current look. Quit ZapFast before applying or restoring, then reopen it: its theme reload command refreshes palettes but does not re-read the selected theme from settings.
@@ -61,7 +61,7 @@ For a tool Scene doesn't know, add a script in Settings → Scripts. Scene runs 
 echo "accent $SCENE_ACCENT on $SCENE_BACKGROUND, red $SCENE_ANSI_1"   # also SCENE_THEME_FILE, SCENE_APPEARANCE
 ```
 
-The variables are `SCENE_THEME_ID`, `SCENE_APPEARANCE`, one per interface color (`SCENE_BACKGROUND`, `SCENE_SURFACE`, `SCENE_OVERLAY`, `SCENE_BORDER`, `SCENE_FOREGROUND`, `SCENE_MUTED`, `SCENE_ACCENT`, `SCENE_SELECTION`, `SCENE_CURSOR`, `SCENE_CURRENT_LINE`, `SCENE_SEARCH`, `SCENE_ERROR`, `SCENE_WARNING`, `SCENE_SUCCESS`, `SCENE_INFO`), and `SCENE_ANSI_0` to `SCENE_ANSI_15`, each as `#rrggbb`. The file is `~/.config/scene/theme.json`. Scripts run without a shell and with a short `PATH`, for 10 seconds at most. A script must be executable, and only you may change it and its folder. Scripts come only from Settings, never from a theme.
+The variables are `SCENE_THEME_ID`, `SCENE_APPEARANCE`, one per interface color (`SCENE_BACKGROUND`, `SCENE_SURFACE`, `SCENE_OVERLAY`, `SCENE_BORDER`, `SCENE_FOREGROUND`, `SCENE_MUTED`, `SCENE_ACCENT`, `SCENE_SELECTION`, `SCENE_CURSOR`, `SCENE_CURRENT_LINE`, `SCENE_SEARCH`, `SCENE_ERROR`, `SCENE_WARNING`, `SCENE_SUCCESS`, `SCENE_INFO`), and `SCENE_ANSI_0` to `SCENE_ANSI_15`, each as `#rrggbb`. The file is `~/.config/scene/theme.json`; it also has the syntax colors of each look. Scripts run without a shell and with a short `PATH`, for 10 seconds at most. A script must be executable, and only you may change it and its folder. Scripts come only from Settings, never from a theme.
 
 ## Install
 

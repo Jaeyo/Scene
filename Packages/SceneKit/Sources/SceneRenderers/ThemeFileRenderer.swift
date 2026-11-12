@@ -3,6 +3,7 @@ import SceneThemes
 
 /// The theme file for the user's own scripts, and the environment Scene runs them with.
 /// Only typed values go in: colors as hex, the theme id (restricted by the loader), its version, and its sanitized name.
+/// MonoCode reads the same file from its own themes folder (`MonocodeIntegration`).
 public enum ThemeFileRenderer {
     /// The interface roles, in the order of `InterfaceColors`, with their key in the file.
     public static let roles: [(key: String, color: KeyPath<InterfaceColors, RGBA> & Sendable)] = [
@@ -10,6 +11,15 @@ public enum ThemeFileRenderer {
         ("foreground", \.foreground), ("muted", \.muted), ("accent", \.accent), ("selection", \.selection),
         ("cursor", \.cursor), ("currentLine", \.currentLine), ("search", \.search), ("error", \.error),
         ("warning", \.warning), ("success", \.success), ("info", \.info),
+    ]
+
+    /// The syntax roles, in the order of `SyntaxColors`, with their key in the file. Only the color goes in.
+    public static let syntaxRoles: [(key: String, style: KeyPath<SyntaxColors, SyntaxStyle> & Sendable)] = [
+        ("comment", \.comment), ("keyword", \.keyword), ("operator", \.operator), ("punctuation", \.punctuation),
+        ("string", \.string), ("escape", \.escape), ("number", \.number), ("constant", \.constant),
+        ("function", \.function), ("type", \.type), ("builtin", \.builtin), ("variable", \.variable),
+        ("parameter", \.parameter), ("property", \.property), ("tag", \.tag), ("attribute", \.attribute),
+        ("added", \.added), ("removed", \.removed), ("changed", \.changed),
     ]
 
     /// `#rrggbb`, or `#rrggbbaa` when the color is not opaque.
@@ -31,6 +41,7 @@ public enum ThemeFileRenderer {
                     "cursorText": hex(t.cursorText), "selectionBackground": hex(t.selectionBackground),
                     "selectionForeground": hex(t.selectionForeground), "ansi": t.ansi.map(hex),
                 ] as [String: Any],
+                "syntax": Dictionary(uniqueKeysWithValues: syntaxRoles.map { ($0.key, hex(v.syntax[keyPath: $0.style].color)) }),
             ]
         }
         let out: [String: Any] = [

@@ -30,7 +30,11 @@ struct ScriptsTests {
             let ansi = try #require(terminal["ansi"] as? [String])
             #expect(ansi.count == 16 && ansi.allSatisfy(Self.isHex))
             #expect(Self.isHex(terminal["background"]) && Self.isHex(terminal["selectionForeground"]))
+            let syntax = try #require(variant["syntax"] as? [String: String])
+            #expect(syntax.count == 19 && syntax.values.allSatisfy(Self.isHex))
         }
+        let dark = try #require(variants["dark"]?["syntax"] as? [String: String])
+        #expect(dark["keyword"] == ThemeFileRenderer.hex(request.variant(.dark).syntax.keyword.color))
     }
 
     @Test func forcedLookWritesOneVariantAndItsVariables() throws {
